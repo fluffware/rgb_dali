@@ -4,7 +4,7 @@ CC=avr-gcc
 LD=avr-gcc
 PRGNAME=rgb_dali
 ARCHFLAGS= -mmcu=atmega328
-CFLAGS=-pedantic -g -Wall
+CFLAGS=-pedantic -g -Wall 
 CPPFLAGS="-DF_CPU=16000000"
 
 all: $(PRGNAME).hex
@@ -23,9 +23,10 @@ clean:
 	-rm $(PRGNAME).bin
 	-rm $(PRGNAME).hex
 
-AVRDUDE = avrdude -v -c avrisp2 -p m328p
+AVRDUDE = avrdude 
+AVRDUDE_CMD = $(AVRDUDE) -v -c avrisp2 -p m328p 
 fuse:
-	$(AVRDUDE) -U hfuse:w:0b11011001:m -U lfuse:w:0b01110111:m
+	$(AVRDUDE_CMD) -u -U hfuse:w:0b11011001:m -U lfuse:w:0b11111111:m
 
 load: $(PRGNAME).hex
-	$(AVRDUDE) -U flash:w:$(PRGNAME).hex
+	$(AVRDUDE_CMD) -U flash:w:$(PRGNAME).hex
