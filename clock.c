@@ -7,7 +7,7 @@ static volatile clock_time_t current_clock = 0;
 static volatile unsigned long current_seconds = 0;
 static unsigned int second_countdown = CLOCK_SECOND;
 
-ISR(TIMER0_COMPA_vect)
+ISR(TIMER0_COMPA_vect, ISR_NOBLOCK)
 {
    current_clock++;
    if(etimer_pending() 
