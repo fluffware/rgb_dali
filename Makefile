@@ -2,17 +2,23 @@ MCU=atmega328p
 
 CC=avr-gcc
 LD=avr-gcc
+AS=avr-as
 PRGNAME=rgb_dali
 ARCHFLAGS= -mmcu=atmega328
 CFLAGS=-pedantic -g -Wall 
-CPPFLAGS="-DF_CPU=16000000"
+CPPFLAGS="-DF_CPU=16000000" -I contiki/core -I .
+CONTIKI_OBJS= etimer.o timer.o process.o
+VPATH=contiki/core/sys
 
 all: $(PRGNAME).hex
 
 .c.o: 
 	$(CC) $(CFLAGS) $(CPPFLAGS) $(ARCHFLAGS) -c -o $@ $^
 
-$(PRGNAME).bin: $(PRGNAME).o
+.S.o: 
+	$(CC) $(ARCHFLAGS) -x assembler-with-cpp -c -o $@ $^
+
+$(PRGNAME).bin: $(PRGNAME).o send_ws2812.o dali.o clock.o $(CONTIKI_OBJS)
 	$(LD) $(ARCHFLAGS) -o $@ $^
 
 %.hex: %.bin
